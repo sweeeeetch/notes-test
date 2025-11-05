@@ -9,7 +9,7 @@ RUN npm ci
 
 COPY . .
 
-RUN npm run build
+RUN npm run build && ls -la && ls -la dist/
 
 FROM node:20-alpine
 
@@ -26,4 +26,4 @@ COPY --from=builder /app/dist ./dist
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["node", "dist/index.js"]

@@ -1,7 +1,4 @@
-version: "3.8"
-
-# This file is automatically loaded by docker-compose for local development
-# It overrides settings from docker-compose.yml
+# Dev conf
 
 services:
   backend:

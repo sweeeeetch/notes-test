@@ -1,14 +1,4 @@
 node_modules
-dist
-npm-debug.log
-.env
-.env.local
-.env.*.local
-*.log
-.DS_Store
-coverage
-.vscode
-.idea
 *.test.ts
 *.spec.ts
 test-utils
