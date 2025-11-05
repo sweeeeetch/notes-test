@@ -17,7 +17,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false,
-    "types": ["node"],
+    "types": ["node", "@types/bcrypt", "@types/jsonwebtoken"],
     "composite": true
   },
   "include": ["src/**/*"],
