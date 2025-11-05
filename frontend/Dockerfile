@@ -1,7 +1,8 @@
-
-FROM node:20-alpine AS builder
+FROM node:20-alpine
 
 WORKDIR /app
+
+ENV NODE_ENV=production
 
 COPY package*.json ./
 
@@ -11,18 +12,7 @@ COPY . .
 
 RUN npm run build
 
-FROM node:20-alpine
-
-WORKDIR /app
-
-ENV NODE_ENV=production
-
-COPY package*.json ./
-
-RUN npm ci --only=production
-
-# Copy built application from builder stage
-COPY --from=builder /app/.output ./.output
+RUN npm prune --production
 
 EXPOSE 3000
 
