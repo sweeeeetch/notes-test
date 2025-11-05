@@ -52,7 +52,20 @@ npm run dev
 docker-compose up -d
 ```
 
-Всё поднимется автоматически на http://localhost:3000
+Всё поднимется автоматически на http://localhost:3001
+
+### Заполнение базы тестовыми данными
+
+Для заполнения бд тестовыми данными используйте seed:
+
+```bash
+# Через Docker
+docker-compose run --rm seed
+
+# Или локально
+cd backend
+npm run seed
+```
 
 ## API
 

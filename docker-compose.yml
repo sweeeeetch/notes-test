@@ -28,6 +28,7 @@ services:
       - ./backend/.env
     environment:
       NODE_ENV: production
+      PORT: 3000
       MONGODB_URI: mongodb://mongodb:27017/?authSource=admin&directConnection=true
       DB_NAME: notes_service
     ports:
@@ -38,12 +39,11 @@ services:
     networks:
       - notes-network
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
   frontend:
     build:
       context: ./frontend
@@ -54,7 +54,7 @@ services:
       - ./frontend/.env
     environment:
       NODE_ENV: production
-      NUXT_PUBLIC_API_BASE: http://backend:3000
+      NUXT_PUBLIC_API_BASE: http://localhost:3000
     ports:
       - "3001:3000"
     depends_on:
@@ -63,11 +63,31 @@ services:
     networks:
       - notes-network
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 40s
+      start_period: 20s
+
+  seed:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.seed
+    container_name: notes-seed
+    env_file:
+      - ./backend/.env
+    environment:
+      NODE_ENV: development
+      MONGODB_URI: mongodb://mongodb:27017/?authSource=admin&directConnection=true
+      DB_NAME: notes_service
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - notes-network
+    restart: "no"
+    profiles:
+      - tools
 
 networks:
   notes-network:

@@ -1,8 +1,11 @@
 import 'reflect-metadata';
-import { connectDB, closeDB } from '../db';
+import { DataSource } from 'typeorm';
+import * as dotenv from 'dotenv';
+import * as bcrypt from 'bcrypt';
 import { User } from '../entities/User';
 import { Note } from '../entities/Note';
-import * as bcrypt from 'bcrypt';
+
+dotenv.config();
 
 const SALT_ROUNDS = 10;
 
@@ -85,9 +88,20 @@ const sampleNotes = [
 ];
 
 async function seed() {
+  const dataSource = new DataSource({
+    type: 'mongodb',
+    url:
+      process.env.MONGODB_URI ||
+      'mongodb://localhost:27017/notes_service?authSource=admin&directConnection=true',
+    database: process.env.DB_NAME || 'notes_service',
+    synchronize: true,
+    logging: false,
+    entities: [User, Note],
+  });
+
   try {
     console.log('Подключение к MongoDB...');
-    const dataSource = await connectDB();
+    await dataSource.initialize();
 
     console.log('Запуск процесса заполнения...');
 
@@ -100,8 +114,8 @@ async function seed() {
 
     if (existingUser) {
       console.log('Тестовые данные уже существуют. Пропускаем...');
-      await closeDB();
-      return;
+      await dataSource.destroy();
+      process.exit(0);
     }
 
     console.log('Создание тестовых пользователей...');
@@ -138,9 +152,11 @@ async function seed() {
     console.log('\nEmail: demo@example.com');
     console.log('Пароль: password123');
 
-    await closeDB();
+    await dataSource.destroy();
+    process.exit(0);
   } catch (error) {
     console.error('Ошибка при заполнении:', error);
+    await dataSource.destroy();
     process.exit(1);
   }
 }
