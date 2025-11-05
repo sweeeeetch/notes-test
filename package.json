@@ -1,0 +1,23 @@
+{
+  "name": "notes-service-monorepo",
+  "version": "1.0.0",
+  "description": "Notes service monorepo with backend and frontend",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "format:backend": "cd backend && npm run format",
+    "format:frontend": "cd frontend && npm run format"
+  },
+  "keywords": [
+    "monorepo",
+    "notes",
+    "moleculer",
+    "vue3"
+  ],
+  "author": "",
+  "license": "MIT"
+}

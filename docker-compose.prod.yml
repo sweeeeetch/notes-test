@@ -1,0 +1,19 @@
+version: "3.8"
+
+# Production configuration
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+services:
+  backend:
+    env_file:
+      - ./backend/.env.production
+    environment:
+      NODE_ENV: production
+    volumes:
+      - ./backend/logs:/app/logs
+
+  frontend:
+    env_file:
+      - ./frontend/.env.production
+    environment:
+      NODE_ENV: production
